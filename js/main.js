@@ -1,5 +1,5 @@
 
-var money,
+let money,
     income, 
     addExpenses, 
     deposit,
@@ -7,6 +7,7 @@ var money,
     period ; 
 
     alert ("Hello world");
+    console.log ("Hello world");
 
 
 
