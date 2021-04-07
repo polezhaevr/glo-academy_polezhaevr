@@ -13,11 +13,15 @@ let money = +prompt('Ваш месячный доход?'),
 console.log(addExpenses.toLowerCase().split(','));
 
 //вызовы функции showTypeOf
-const showTypeOf = function() {
-    console.log(typeof money + "\n" + typeof income + "\n" + typeof deposit);
+const showTypeOf = function(value) {
+    let type = typeof (value);
+    console.log (type);
 };
 
-showTypeOf(); 
+showTypeOf(money);
+showTypeOf(income);
+showTypeOf(deposit);
+
 
 //Расходы за месяц вызов getExpensesMonth
 const getExpensesMonth = function (sumOne , sumTwo) {
@@ -28,8 +32,8 @@ let sum = getExpensesMonth(amountOne , amountTwo);
 console.log("Расходы за месяц " + sum);
 
 //getAccumulatedMonth. Функция возвращает Накопления за месяц (Доходы минус расходы)
-const getAccumulatedMonth = function (fullMoney, fullSum) {
-    return fullMoney - fullSum;
+const getAccumulatedMonth = function (inComes, costs) {
+    return inComes - costs;
 };
 
 let accumulatedMonth = getAccumulatedMonth(money, sum);
