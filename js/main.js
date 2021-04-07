@@ -10,33 +10,40 @@ let money = +prompt('Ваш месячный доход?'),
     expensesTwo = prompt('Введите обязательную статью расходов'),
     amountTwo = +prompt('Во сколько это обойдется?');
    
-console.log(typeof money + "\n" + typeof income + "\n" + typeof deposit);
 console.log(addExpenses.toLowerCase().split(','));
 
-
-let getExpensesMonth = function (amountOne, amountTwo) {
-    return amountOne + amountTwo;
+//вызовы функции showTypeOf
+const showTypeOf = function() {
+    console.log(typeof money + "\n" + typeof income + "\n" + typeof deposit);
 };
 
-let sum = getExpensesMonth(amountOne, amountTwo);
+showTypeOf(); 
+
+//Расходы за месяц вызов getExpensesMonth
+const getExpensesMonth = function (sumOne , sumTwo) {
+    return sumOne + sumTwo;
+};
+
+let sum = getExpensesMonth(amountOne , amountTwo);
 console.log("Расходы за месяц " + sum);
 
-let getAccumulatedMonth = function (money, sum) {
-    return money - sum;
+//getAccumulatedMonth. Функция возвращает Накопления за месяц (Доходы минус расходы)
+const getAccumulatedMonth = function (fullMoney, fullSum) {
+    return fullMoney - fullSum;
 };
 
 let accumulatedMonth = getAccumulatedMonth(money, sum);
 
-let getTargetMonth = function (mission) {
-    return mission / accumulatedMonth; 
+//  Cрок достижения цели в месяцах (результат вызова функции getTargetMonth) 
+let getTargetMonth = function (intent) {
+    return intent / accumulatedMonth; 
 };
 
 let target = getTargetMonth (mission);
 console.log("Срок достидения цели "+ Math.ceil(target));
 
-
+//Бюджет на день (budgetDay)
 let budgetDay =  accumulatedMonth / 30;
-
 console.log("Бюджет на день " + budgetDay);
 
 let getStatusIncome = function() {
