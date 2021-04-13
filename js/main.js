@@ -137,3 +137,43 @@ appData.getStatusIncome();
 appData.getInfoDeposit();
 
 console.log(appData);
+
+let btnCalc = document.getElementById('start'), 
+    btnPlusOne = document.getElementsByTagName('button')[0],
+    btnPlusTwo = document.getElementsByTagName('button')[1],
+    inpCheck = document.querySelector('#deposit-check'), 
+    incomeIteem = document.querySelectorAll('.additional_income-item'), 
+    resultTotal = document.querySelectorAll('.result-total'), 
+    salaryAmount = document.querySelectorAll('.salary-amount'), 
+    incomeTitle = document.querySelector('.income-title'),
+    incomeAmount = document.querySelector('.income-amount'),
+    additionalIncomeItem = document.querySelectorAll('.additional_income-item'),
+    expensesTitle = document.querySelector('.expenses-title'),
+    expensesAmount = document.querySelector('.expenses-amount'), 
+    additionalExpensesItem = document.querySelector('.additional_expenses-item'), 
+    depositAmount = document.querySelector('.deposit-amount'),
+    depositPercent = document.querySelector('.deposit-percent'),
+    targetAmount = document.querySelector('.target-amount'), 
+    periodSelect = document.querySelector('.period-select');
+
+
+
+
+
+console.log(btnCalc);
+console.log(btnPlusOne); 
+console.log(btnPlusTwo); 
+console.log(inpCheck);
+console.log(incomeIteem); 
+console.log(resultTotal);
+console.log(salaryAmount); 
+console.log(incomeTitle);
+console.log(incomeAmount);
+console.log(additionalIncomeItem);
+console.log(expensesTitle);
+console.log(expensesAmount);
+console.log(additionalExpensesItem);
+console.log(depositAmount );
+console.log(depositPercent);
+console.log(targetAmount);
+console.log(periodSelect);
