@@ -61,7 +61,7 @@ let appData = {
             item.value = '';
         });
 
-        for (let i = incomeItems.length - 1; i > 0; i--) {
+        for (let i = incomeItem.length - 1; i > 0; i--) {
             incomeItem[0].parentNode.removeChild(incomeItems[i]);
             incomeItem.placeholder = ''; 
         }
