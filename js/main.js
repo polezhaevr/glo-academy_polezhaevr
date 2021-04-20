@@ -24,7 +24,8 @@ let btnCalc = document.getElementById('start'),
     targetMonthValue = document.getElementsByClassName('target_month-value')[0],
     incomePeriodValue = document.getElementsByClassName('income_period-value')[0],
     incomeItem = document.querySelectorAll('.income-items'),
-    periodAmount = document.querySelector('.period-amount');
+    periodAmount = document.querySelector('.period-amount'), 
+    resetBtn =  document.getElementById('cancel');
 
 
 let appData = {
@@ -52,15 +53,28 @@ let appData = {
         this.checkStart();
     },
     reset: function () {
+        
+        this.budget = 0; 
+        this.budgetDay = 0; 
+        this.budgetMonth = 0; 
+        this.expensesMonth = 0; 
+        this.inCome = {};
+        this.incomeMonth = 0; 
+        this.addIncome = [];
+        this.expenses = {};
+        this.addExpenses = [];
+        this.deposit = false;
+        this.precentDeposi = 0; 
+        this.moneyDeposit = 0;  
+        
+
         btnPlusOne.style.display = '';
         btnPlusTwo.style.display = '';
         periodAmount.value = document.querySelector('.period-amount').textContent = 1;
-        this.banInputs(false);
-        this.banStart();
         document.querySelectorAll('input[type=text]').forEach(item => {
             item.value = '';
         });
-
+         
         for (let i = incomeItem.length - 1; i > 0; i--) {
             incomeItem[0].parentNode.removeChild(incomeItems[i]);
             incomeItem.placeholder = ''; 
@@ -69,6 +83,9 @@ let appData = {
             expensesItems[0].parentNode.removeChild(expensesItems[i]);
             expensesItems.placeholder = ''; 
         }
+        start.style.display = '';
+        resetBtn.style.display = ''; 
+        
     },
     banInputs: function (disabled = true) {
         document.querySelectorAll('input[type=text]').forEach(item => {
@@ -80,11 +97,8 @@ let appData = {
     },
     checkStart: function () {
         if (start.textContent === 'Рассчитать') {
-            this.banInputs();
-            start.textContent = 'Сбросить';
-        } else {
-            start.textContent = 'Рассчитать';
-            this.reset();
+            start.style.display = 'none';
+            resetBtn.style.display = 'initial';  
         }
     },
     showResults: function () {
@@ -228,3 +242,6 @@ btnPlusTwo.addEventListener('click', appData.addExpensesBlock);
 btnPlusOne.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('input', appData.changePeriodSelect);
 salaryAmount.addEventListener('input', appData.banStart);
+resetBtn.addEventListener('click' , appData.reset);
+
+console.log(appData);
