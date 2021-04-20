@@ -53,7 +53,6 @@ let appData = {
         this.checkStart();
     },
     reset: function () {
-        
         this.budget = 0; 
         this.budgetDay = 0; 
         this.budgetMonth = 0; 
@@ -65,9 +64,7 @@ let appData = {
         this.addExpenses = [];
         this.deposit = false;
         this.precentDeposi = 0; 
-        this.moneyDeposit = 0;  
-        
-
+        this.moneyDeposit = 0;   
         btnPlusOne.style.display = '';
         btnPlusTwo.style.display = '';
         periodAmount.value = document.querySelector('.period-amount').textContent = 1;
@@ -76,7 +73,7 @@ let appData = {
         });
          
         for (let i = incomeItem.length - 1; i > 0; i--) {
-            incomeItem[0].parentNode.removeChild(incomeItems[i]);
+            incomeItem[0].parentNode.removeChild(incomeItem[i]);
             incomeItem.placeholder = ''; 
         }
         for (let i = expensesItems.length - 1; i > 0; i--) {
@@ -85,7 +82,7 @@ let appData = {
         }
         start.style.display = '';
         resetBtn.style.display = ''; 
-        
+   
     },
     banInputs: function (disabled = true) {
         document.querySelectorAll('input[type=text]').forEach(item => {
@@ -137,7 +134,7 @@ let appData = {
             let itemExpenses = item.querySelector('.expenses-title').value;
             let cashExpenses = item.querySelector('.expenses-amount').value;
             if (itemExpenses !== '' && cashExpenses !== '') {
-                appData.expenses[itemExpenses] = Number(cashExpenses);
+                appData.expenses[itemExpenses] = +cashExpenses;
             }
         });
     },
@@ -173,8 +170,9 @@ let appData = {
         });
     },
     getExpensesMonth: function () {
+        this.expensesMonth = 0; 
         for (let key in this.expenses) {
-            return appData.expensesMonth = this.expenses[key] + this.expenses[key];
+            return appData.expensesMonth += this.expenses[key];
         }
     },
     getAccumulatedMonth: function () {
@@ -235,13 +233,14 @@ let isString = function (n) {
 
 
 const btnCalcStart = appData.start.bind(appData);
+const resetBtnStart = appData.reset.bind(appData);
 
 appData.banStart();
 btnCalc.addEventListener('click', btnCalcStart);
+resetBtn.addEventListener('click' , resetBtnStart);
 btnPlusTwo.addEventListener('click', appData.addExpensesBlock);
 btnPlusOne.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('input', appData.changePeriodSelect);
 salaryAmount.addEventListener('input', appData.banStart);
-resetBtn.addEventListener('click' , appData.reset);
 
 console.log(appData);
