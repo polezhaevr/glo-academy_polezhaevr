@@ -82,6 +82,9 @@ let appData = {
         }
         start.style.display = '';
         resetBtn.style.display = ''; 
+        btnCalc.disabled = true;
+        periodSelect.value = 1; 
+
    
     },
     banInputs: function (disabled = true) {
@@ -93,8 +96,8 @@ let appData = {
 
     },
     checkStart: function () {
-        if (start.textContent === 'Рассчитать') {
-            start.style.display = 'none';
+        if (btnCalc.click) {
+            btnCalc.style.display = 'none';
             resetBtn.style.display = 'initial';  
         }
     },
@@ -170,15 +173,13 @@ let appData = {
         });
     },
     getExpensesMonth: function () {
-        this.expensesMonth = 0; 
         for (let key in this.expenses) {
-            return appData.expensesMonth += this.expenses[key];
+            appData.expensesMonth += this.expenses[key];
         }
     },
     getAccumulatedMonth: function () {
         this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
         this.budgetDay = this.budget / 30;
-        return this.budgetMonth, this.budgetDay;
     },
     getTargetMonth: function () {
         return targetAmount.value / this.budgetMonth;
