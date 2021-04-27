@@ -73,7 +73,7 @@ class AppData {
         this.moneyDeposit = 0;
         btnPlusOne.style.display = '';
         btnPlusTwo.style.display = '';
-        start.style.display = '';
+        btnCalc.style.display = '';
         resetBtn.style.display = '';
         btnCalc.disabled = true;
         periodSelect.value = 1;
@@ -89,6 +89,7 @@ class AppData {
             expensesItems[0].parentNode.removeChild(expensesItems[i]);
             expensesItems.placeholder = '';
         }
+        this.startInputs(); 
     }
 
     banInputs() {
@@ -97,6 +98,14 @@ class AppData {
         });
         btnPlusOne.disabled = true;
         btnPlusTwo.disabled = true
+    }
+
+    startInputs() {
+        document.querySelectorAll('input[type=text]').forEach(item => {
+            item.disabled = false;
+        });
+        btnPlusOne.disabled = false;
+        btnPlusTwo.disabled = false; 
     }
 
     checkStart() {
