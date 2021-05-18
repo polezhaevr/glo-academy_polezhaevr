@@ -1,0 +1,117 @@
+window.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+  // Timer
+  function countTimer(deadline) {
+    let timerHours = document.querySelector('#timer-hours'),
+      timerMinutes = document.querySelector('#timer-minutes'),
+      timerSeconds = document.querySelector('#timer-seconds'),
+      zeroInterval = 0;
+
+
+    function getTimeRemaining() {
+      let dateStop = new Date(deadline).getTime(),
+        dateNow = new Date().getTime(),
+        timeRemaining = (dateStop - dateNow) / 1000,
+        seconds = 0,
+        minutes = 0,
+        hours = 0;
+      if (timeRemaining > 0) {
+        seconds = Math.floor(timeRemaining % 60);
+        minutes = Math.floor((timeRemaining / 60) % 60);
+        hours = Math.floor(timeRemaining / 60 / 60);
+      }
+      return {
+        timeRemaining,
+        hours,
+        minutes,
+        seconds
+      };
+    }
+
+
+    function updateClock() {
+      let timer = getTimeRemaining();
+      timerHours.textContent = zero(timer.hours);
+      timerMinutes.textContent = zero(timer.minutes);
+      timerSeconds.textContent = zero(timer.seconds);
+
+      if (timer.timeRemaining < 0) {
+        clearInterval(zeroInterval);
+      }
+    }
+
+    function zero(el) {
+      if (String(el).length === 1) {
+        return '0' + el;
+      } else {
+        return el;
+      }
+    }
+
+    zeroInterval = setInterval(updateClock, 1000);
+
+  }
+  countTimer('20 May 2021');
+
+  //Menu
+
+  const toggleMenu = () => {
+
+    const btnMenu = document.querySelector('.menu'),
+      menu = document.querySelector('menu'),
+      closeBtn = document.querySelector('.close-btn'),
+      menuItem = menu.querySelectorAll('ul>li');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
+    };
+
+    btnMenu.addEventListener('click', handlerMenu);
+    closeBtn.addEventListener('click', handlerMenu);
+    menuItem.forEach((elem) => elem.addEventListener('click', handlerMenu));
+
+  };
+
+  toggleMenu();
+
+  //popup 
+
+  const togglePopup = () => {
+    const popup = document.querySelector('.popup'),
+      popupBtn = document.querySelectorAll('.popup-btn'),
+      popUpClose = document.querySelector('.popup-close'),
+      popUpContent = document.querySelector('.popup-content');
+
+
+    const animationPopUp = () => {
+      let start = Date.now();
+
+      let timer = setInterval(function () {
+        let timePassed = Date.now() - start;
+        document.querySelector('.popup-close'),
+          popUpContent.style.top = timePassed / 10 + 'px';
+
+        if (timePassed > 2000) clearInterval(timer);
+
+      }, 25)
+    };
+
+
+    popupBtn.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        const screenWidth = window.screen.width;
+        popup.style.display = 'block';
+
+        if (screenWidth > 768) {
+
+          animationPopUp();
+        }
+      });
+    });
+
+    popUpClose.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+  };
+  togglePopup();
+});
