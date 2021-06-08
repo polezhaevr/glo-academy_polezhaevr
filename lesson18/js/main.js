@@ -177,7 +177,18 @@ window.addEventListener('DOMContentLoaded', function () {
       portfolioDots = document.querySelector('.portfolio-dots');
 
     let currentSlide = 0,
-      interval;
+        interval;
+
+    const createDots = (parentTarget, slidesNodeList, dotClass, dotActiveClass) => {
+      slidesNodeList.forEach((elem , index) => {
+        const li = document.querySelector('li');
+        li.classList.add(dotClass);
+        if (index === 0) li.classList.add(dotActiveClass);
+        parentTarget.append(li);
+      });
+    };
+
+    createDots( portfolioDots, slide, 'dot', 'dot-active');
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -251,18 +262,6 @@ window.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    const addDots = () => {
-      let createElement = document.createElement('li');
-      createElement.classList.add('dot');    
-
-      if (slide.length > dot.length) {
-          portfolioDots.append(createElement);
-          
-      }
-      
-    };
-
-    addDots();
     startSlide(1000);
 
   };
