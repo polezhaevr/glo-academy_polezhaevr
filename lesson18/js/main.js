@@ -1,188 +1,176 @@
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function() {
   'use strict';
   // Timer
   function countTimer(deadline) {
     let timerHours = document.querySelector('#timer-hours'),
-      timerMinutes = document.querySelector('#timer-minutes'),
-      timerSeconds = document.querySelector('#timer-seconds'),
-      zeroInterval = 0;
+        timerMinutes = document.querySelector('#timer-minutes'),
+        timerSeconds = document.querySelector('#timer-seconds'),
+        idInterval = 0;
 
 
     function getTimeRemaining() {
       let dateStop = new Date(deadline).getTime(),
-        dateNow = new Date().getTime(),
-        timeRemaining = (dateStop - dateNow) / 1000,
-        seconds = 0,
-        minutes = 0,
-        hours = 0;
+          dateNow = new Date().getTime(),
+          timeRemaining = (dateStop - dateNow) / 1000,
+          seconds = 0,
+          minutes = 0,
+          hours = 0;
       if (timeRemaining > 0) {
-        seconds = Math.floor(timeRemaining % 60);
-        minutes = Math.floor((timeRemaining / 60) % 60);
-        hours = Math.floor(timeRemaining / 60 / 60);
-      }
-      return {
-        timeRemaining,
-        hours,
-        minutes,
-        seconds
-      };
-    }
+          seconds = Math.floor(timeRemaining % 60);
+          minutes = Math.floor((timeRemaining / 60) % 60);
+          hours = Math.floor(timeRemaining / 60 / 60);
+      } return {timeRemaining, hours, minutes, seconds};
+      } 
 
+    function addZero(elem) {
+      if (String(elem).length === 1) {
+        return '0' + elem;
+      } else {
+        return elem;
+      }
+    }
 
     function updateClock() {
       let timer = getTimeRemaining();
-      timerHours.textContent = zero(timer.hours);
-      timerMinutes.textContent = zero(timer.minutes);
-      timerSeconds.textContent = zero(timer.seconds);
+      timerHours.textContent = addZero(timer.hours);
+      timerMinutes.textContent = addZero(timer.minutes);
+      timerSeconds.textContent = addZero(timer.seconds);
 
-      if (timer.timeRemaining < 0) {
-        clearInterval(zeroInterval);
+      if(timer.timeRemaining < 0) {
+        clearInterval(idInterval);
       }
     }
-
-    function zero(el) {
-      if (String(el).length === 1) {
-        return '0' + el;
-      } else {
-        return el;
-      }
-    }
-
-    zeroInterval = setInterval(updateClock, 1000);
-
+    idInterval = setInterval(updateClock, 1000);
+    
   }
-  countTimer('20 May 2021');
 
-  //Menu
+  countTimer('30 april 2021');
+  
+  // Menu
 
   const toggleMenu = () => {
-
-    const btnMenu = document.querySelector('.menu'),
-      menu = document.querySelector('menu');
-
-    const handlerMenu = () => {
-      menu.classList.toggle('active-menu');
+    const handlerMenu = (event) => {
+      const target = event.target;
+      const menu = document.querySelector('menu');
+      const displayMenu = () => {
+        menu.classList.toggle('active-menu');
+      };
+      
+      if (target.closest('.menu')) {
+        displayMenu();
+      } else if (!target.classList.contains('active-menu') && menu.classList.contains('active-menu')) {
+        displayMenu();
+      }
     };
-
-    btnMenu.addEventListener('click', handlerMenu);
-    
-    menu.addEventListener('click', (event) => {
-      let target = event.target;
       
-      if (!target.matches('a')) {
-          return;
-      } else {
-        handlerMenu(event);
-        }
+    document.addEventListener('click', handlerMenu);
       
-    });
-
   };
-
+  
   toggleMenu();
 
-  //popup 
+   // Scroll smooth
+  
+   const scrollLinks = document.querySelectorAll('a');
 
-  const togglePopup = () => {
+   for (const scrollLink of scrollLinks) {
+     scrollLink.addEventListener('click', event => {
+       event.preventDefault();
+       const id = scrollLink.getAttribute('href');
+       document.querySelector(id).scrollIntoView({
+         behavior: 'smooth',
+         block: 'start',
+         });
+     });
+   }
+   
+  // popup
+
+  const togglePopUp = () => {
     const popup = document.querySelector('.popup'),
-      popupBtn = document.querySelectorAll('.popup-btn'),
-      popUpClose = document.querySelector('.popup-close'),
-      popUpContent = document.querySelector('.popup-content');
-
-
-    const animationPopUp = () => {
-      let start = Date.now();
-
-      let timer = setInterval(function () {
-        let timePassed = Date.now() - start;
-        document.querySelector('.popup-close'),
-          popUpContent.style.top = timePassed / 10 + 'px';
-
-        if (timePassed > 2000) clearInterval(timer);
-
-      }, 25)
-    };
-
-
-    popupBtn.forEach((elem) => {
-      elem.addEventListener('click', () => {
-        const screenWidth = window.screen.width;
-        popup.style.display = 'block';
-
-        if (screenWidth > 768) {
-
-          animationPopUp();
-        }
-      });
-    });
-
-    popUpClose.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
-
+          popupBtn = document.querySelectorAll('.popup-btn'),
+          popupContent = document.querySelector('.popup-content');
     popup.addEventListener('click', (event) => {
-      let target = event.target;
-
+    let target = event.target;
       if (target.classList.contains('popup-close')) {
         popup.style.display = 'none';
       } else {
         target = target.closest('.popup-content');
-
         if (!target) {
           popup.style.display = 'none';
         }
       }
-
     });
-  };
-  togglePopup();
+          
+    let count = 100;
+      const modalAnimate = () => {
+        let modalAnimateID = requestAnimationFrame(modalAnimate);   
+        if (count > 0) {
+          count -= 5;            
+          popupContent.style.transform = `translateY(${-count}px)`;       
+        } 
+        if (count === 0) {       
+          cancelAnimationFrame(modalAnimateID);
+        }   
+      };
+          
+      popupBtn.forEach((elem) => {
+        elem.addEventListener("click", () => {
+          popup.style.display = "block";  
+          const screenWidth = window.screen.width;  
+            if (screenWidth > 768) { 
+            count = 100;    
+            modalAnimate(); 
+                 
+          }   
+        });    
+      });
+    };
+      
+   togglePopUp();
 
-  //tabs
+  // Tabs
 
   const tabs = () => {
     const tabHeader = document.querySelector('.service-header'),
-      tab = tabHeader.querySelectorAll('.service-header-tab'),
-      tabContent = document.querySelectorAll('.service-tab');
+          tab = tabHeader.querySelectorAll('.service-header-tab'),
+          tabContent = document.querySelectorAll('.service-tab');
+          const toggleTabContent = (index) => {
+            for(let i = 0; i < tabContent.length; i++) {
+              if (index === i) {
+                tab[i].classList.add('active');
+                tabContent[i].classList.remove('d-none');
+              } else {
+                tab[i].classList.remove('active');
+                tabContent[i].classList.add('d-none');
+              }
+            }
+          };
 
-    const toggleTabContent = (index) => {
-      for (let i = 0; i < tabContent.length; i++) {
-        if (index === i) {
-          tab[i].classList.add('active');
-          tabContent[i].classList.remove('d-none');
-        } else {
-          tabContent[i].classList.add('d-none');
-          tab[i].classList.remove('active');
-        }
-      }
-    };
-
-    tabHeader.addEventListener('click', (event) => {
-      let target = event.target;
-      target = target.closest('.service-header-tab');
-      if (target) {
-        tab.forEach((item, i) => {
-          if (item === target) {
-            toggleTabContent(i);
+          tabHeader.addEventListener('click', (event) => {
+            let target = event.target;
+            target = target.closest('.service-header-tab');
+            if (target) {
+              tab.forEach((item, i) => {
+                if (item === target) {
+                  toggleTabContent(i);
+                }
+              });
           }
-        });
-      };
-    });
-
+      });
   };
 
-  tabs();
-
+  tabs();  
+  
   // Slider 
 
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
       dot = document.querySelectorAll('.dot'),
-      slider = document.querySelector('.portfolio-content'), 
-      portfolioDots = document.querySelector('.portfolio-dots');
+      slider = document.querySelector('.portfolio-content');
 
     let currentSlide = 0,
-        interval;
-
+      interval;
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -201,7 +189,7 @@ window.addEventListener('DOMContentLoaded', function () {
       }
       nextSlide(slide, currentSlide, 'portfolio-item-active');
       nextSlide(dot, currentSlide, 'dot-active');
-    };
+    }; 
 
     const startSlide = (time = 3000) => {
       interval = setInterval(autoPlaySlide, time);
@@ -237,8 +225,8 @@ window.addEventListener('DOMContentLoaded', function () {
       if (currentSlide >= slide.length) {
         currentSlide = 0;
       }
-      if (currentSlide < 0) {
-        currentSlide = slide.length - 1;
+      if(currentSlide < 0) {
+        currentSlide = slide.length -1;
       }
       nextSlide(slide, currentSlide, 'portfolio-item-active');
       nextSlide(dot, currentSlide, 'dot-active');
@@ -256,7 +244,7 @@ window.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    startSlide(1000);
+    startSlide(2000);
 
   };
 
@@ -275,7 +263,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
   addDot();
   slider();
-
+  
   // Change photo
 
   const changePhoto = () => {
@@ -292,13 +280,8 @@ window.addEventListener('DOMContentLoaded', function () {
 			}
 		};
 
-    commandPhotos.forEach((elem) => {
-      elem.addEventListener('mouseover', changingPhotos);
-    });
-
-    commandPhotos.forEach((elem) => {
-      elem.addEventListener('mouseout', changingPhotos);
-    });
+    commandPhotos.forEach(() => addEventListener('mouseover', changingPhotos));
+    commandPhotos.forEach(() => addEventListener('mouseout', changingPhotos));
 
 	};  
 
@@ -307,7 +290,7 @@ window.addEventListener('DOMContentLoaded', function () {
   // Check calculator
 
   const checkCalcBlock = () => {
-    const calcItems = document.querySelectorAll('.calc-item');
+    const calcItems = document.querySelectorAll('.calc-block>input');
 
     calcItems.forEach((elem) => {
       elem.addEventListener('input', (event) => {   
@@ -325,7 +308,6 @@ window.addEventListener('DOMContentLoaded', function () {
     
     const checkingInputs = (event) => {
       let target = event.target;
-      let name = document.querySelector('.top-form')[0];
       if (target.name === 'user_name' || target.matches('.mess')) {
         target.value = target.value.replace(/[^а-яё ,.-]/gi, '');
       } 
@@ -338,7 +320,7 @@ window.addEventListener('DOMContentLoaded', function () {
     };  
        
     topForms.forEach((elem) => {
-      elem.addEventListener('blur', (event) => {
+      elem.addEventListener('blur', () => {
         // Заменяет 2 и более тире на один
         elem.value = elem.value.replace(/-{1,}/g, "-");
         // Заменяет 2 и более пробела на один
@@ -346,8 +328,7 @@ window.addEventListener('DOMContentLoaded', function () {
         // Удаляет пробелы и тире в начале и конце строки
         elem.value = elem.value.replace(/^\s|\s$|^-|-$/g, "");
         // Приводит первую букву каждого слова в Верхний регистр в поле "Ваше имя"
-        if (elem.name === 'user_name') {
-        
+        if (elem.name === 'user_name') { 
           let nameFirstLetter = [];
           let word = elem.value.split(" ");
           word.forEach((item) => {
@@ -357,15 +338,86 @@ window.addEventListener('DOMContentLoaded', function () {
           });
         }
       }, true);
-    });
-       
-        
-      
+    });   
    
-    topForms.forEach(addEventListener('input', checkingInputs));
+    topForms.forEach(() => addEventListener('input', checkingInputs));
     
   };
   
-
   checkInputs();
+  
+  // Calculator 
+
+  const calc = (price = 100) => {
+    const calcBlock = document.querySelector('.calc-block'),
+      calcType = document.querySelector('.calc-type'),
+      calcSquare = document.querySelector('.calc-square'),
+      calcDay = document.querySelector('.calc-day'),
+      calcCount = document.querySelector('.calc-count'),
+      totalValue = document.getElementById('total');
+
+    const countSum = () => {
+      let total = 0,
+      countValue = 1,
+      dayValue = 1;
+      const typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = +calcSquare.value;
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+
+      if (calcDay.value && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+
+      if (typeValue && squareValue) {
+        total = price * typeValue * squareValue * countValue * dayValue;
+      } 
+
+      totalValue.textContent = total;
+
+      function animate({timing, draw, duration}) {
+        let start = performance.now();
+        requestAnimationFrame(function animate(time) {
+          let timeFraction = (time - start) / duration;
+          if (timeFraction > 1) {
+            timeFraction = 1;
+          }
+          let progress = timing(timeFraction);
+          draw(progress);
+          if (timeFraction < 1) {
+            requestAnimationFrame(animate);
+          }
+        });
+      }
+      
+        const animation = () => {
+          animate({
+            duration: 1000,
+            timing(timeFraction) {
+              return timeFraction;
+            },
+            draw(progress) {
+              totalValue.textContent = Math.floor(progress * total);
+            }
+          });
+        };
+        animation();
+    };
+
+      calcBlock.addEventListener('change', (event) => {
+        const target = event.target;
+        if (target === calcType || target === calcSquare ||
+          target === calcDay || target === calcCount) {
+          countSum();
+        }
+      });
+      
+  };
+
+  calc(100);
+
 });
