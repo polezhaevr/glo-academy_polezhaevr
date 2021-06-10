@@ -5,7 +5,7 @@ window.addEventListener('DOMContentLoaded', function () {
     let timerHours = document.querySelector('#timer-hours'),
       timerMinutes = document.querySelector('#timer-minutes'),
       timerSeconds = document.querySelector('#timer-seconds'),
-      idInterval = 0;
+      zeroInterval = 0;
 
 
     function getTimeRemaining() {
@@ -28,127 +28,130 @@ window.addEventListener('DOMContentLoaded', function () {
       };
     }
 
-    function addZero(elem) {
-      if (String(elem).length === 1) {
-        return '0' + elem;
-      } else {
-        return elem;
-      }
-    }
 
     function updateClock() {
       let timer = getTimeRemaining();
-      timerHours.textContent = addZero(timer.hours);
-      timerMinutes.textContent = addZero(timer.minutes);
-      timerSeconds.textContent = addZero(timer.seconds);
+      timerHours.textContent = zero(timer.hours);
+      timerMinutes.textContent = zero(timer.minutes);
+      timerSeconds.textContent = zero(timer.seconds);
 
       if (timer.timeRemaining < 0) {
-        clearInterval(idInterval);
+        clearInterval(zeroInterval);
       }
     }
-    idInterval = setInterval(updateClock, 1000);
+
+    function zero(el) {
+      if (String(el).length === 1) {
+        return '0' + el;
+      } else {
+        return el;
+      }
+    }
+
+    zeroInterval = setInterval(updateClock, 1000);
 
   }
+  countTimer('20 May 2021');
 
-  countTimer('30 april 2021');
-
-  // Menu
+  //Menu
 
   const toggleMenu = () => {
-    const handlerMenu = (event) => {
-      const target = event.target;
-      const menu = document.querySelector('menu');
-      const displayMenu = () => {
-        menu.classList.toggle('active-menu');
-      };
 
-      if (target.closest('.menu')) {
-        displayMenu();
-      } else if (!target.classList.contains('active-menu') && menu.classList.contains('active-menu')) {
-        displayMenu();
-      }
+    const btnMenu = document.querySelector('.menu'),
+      menu = document.querySelector('menu');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
     };
 
-    document.addEventListener('click', handlerMenu);
+    btnMenu.addEventListener('click', handlerMenu);
+    
+    menu.addEventListener('click', (event) => {
+      let target = event.target;
+      
+      if (!target.matches('a')) {
+          return;
+      } else {
+        handlerMenu(event);
+        }
+      
+    });
 
   };
 
   toggleMenu();
 
-  // Scroll smooth
+  //popup 
 
-  const scrollLinks = document.querySelectorAll('a');
-
-  for (const scrollLink of scrollLinks) {
-    scrollLink.addEventListener('click', event => {
-      event.preventDefault();
-      const id = scrollLink.getAttribute('href');
-      document.querySelector(id).scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    });
-  }
-
-  // popup
-
-  const togglePopUp = () => {
+  const togglePopup = () => {
     const popup = document.querySelector('.popup'),
       popupBtn = document.querySelectorAll('.popup-btn'),
-      popupContent = document.querySelector('.popup-content');
+      popUpClose = document.querySelector('.popup-close'),
+      popUpContent = document.querySelector('.popup-content');
+
+
+    const animationPopUp = () => {
+      let start = Date.now();
+
+      let timer = setInterval(function () {
+        let timePassed = Date.now() - start;
+        document.querySelector('.popup-close'),
+          popUpContent.style.top = timePassed / 10 + 'px';
+
+        if (timePassed > 2000) clearInterval(timer);
+
+      }, 25)
+    };
+
+
+    popupBtn.forEach((elem) => {
+      elem.addEventListener('click', () => {
+        const screenWidth = window.screen.width;
+        popup.style.display = 'block';
+
+        if (screenWidth > 768) {
+
+          animationPopUp();
+        }
+      });
+    });
+
+    popUpClose.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
     popup.addEventListener('click', (event) => {
       let target = event.target;
+
       if (target.classList.contains('popup-close')) {
         popup.style.display = 'none';
       } else {
         target = target.closest('.popup-content');
+
         if (!target) {
           popup.style.display = 'none';
         }
       }
-    });
 
-    let count = 100;
-    const modalAnimate = () => {
-      let modalAnimateID = requestAnimationFrame(modalAnimate);
-      if (count > 0) {
-        count -= 5;
-        popupContent.style.transform = `translateY(${-count}px)`;
-      }
-      if (count === 0) {
-        cancelAnimationFrame(modalAnimateID);
-      }
-    };
-
-    popupBtn.forEach((elem) => {
-      elem.addEventListener("click", () => {
-        popup.style.display = "block";
-        const screenWidth = window.screen.width;
-        if (screenWidth > 768) {
-          count = 100;
-          modalAnimate();
-
-        }
-      });
     });
   };
+  togglePopup();
 
-  togglePopUp();
-
-  // Tabs
+  //tabs
 
   const tabs = () => {
     const tabHeader = document.querySelector('.service-header'),
       tab = tabHeader.querySelectorAll('.service-header-tab'),
       tabContent = document.querySelectorAll('.service-tab');
+
     const toggleTabContent = (index) => {
       for (let i = 0; i < tabContent.length; i++) {
         if (index === i) {
           tab[i].classList.add('active');
           tabContent[i].classList.remove('d-none');
         } else {
-          tab[i].classList.remove('active');
           tabContent[i].classList.add('d-none');
+          tab[i].classList.remove('active');
         }
       }
     };
@@ -162,8 +165,9 @@ window.addEventListener('DOMContentLoaded', function () {
             toggleTabContent(i);
           }
         });
-      }
+      };
     });
+
   };
 
   tabs();
@@ -179,16 +183,6 @@ window.addEventListener('DOMContentLoaded', function () {
     let currentSlide = 0,
         interval;
 
-    const createDots = (parentTarget, slidesNodeList, dotClass, dotActiveClass) => {
-      slidesNodeList.forEach((elem , index) => {
-        const li = document.querySelector('li');
-        li.classList.add(dotClass);
-        if (index === 0) li.classList.add(dotActiveClass);
-        parentTarget.append(li);
-      });
-    };
-
-    createDots( portfolioDots, slide, 'dot', 'dot-active');
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);
@@ -266,6 +260,20 @@ window.addEventListener('DOMContentLoaded', function () {
 
   };
 
+  const addDot = () => {
+    const portfolioItems = document.querySelectorAll('.portfolio-item'),
+      portfolioDots = document.querySelector('.portfolio-dots');
+
+      portfolioItems.forEach(() => {
+        const dot = document.createElement('li');
+        dot.classList.add('dot');
+        portfolioDots.appendChild(dot);
+      });
+
+      portfolioDots.children[0].classList.add('dot-active');
+  };
+
+  addDot();
   slider();
 
   // Change photo
@@ -360,5 +368,4 @@ window.addEventListener('DOMContentLoaded', function () {
   
 
   checkInputs();
-
 });
