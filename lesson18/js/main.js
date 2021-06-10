@@ -268,4 +268,97 @@ window.addEventListener('DOMContentLoaded', function () {
 
   slider();
 
+  // Change photo
+
+  const changePhoto = () => {
+    const commandPhotos = document.querySelectorAll('.command__photo');
+    
+    const changingPhotos = (event) => {
+			let target = event.target;
+
+			if (target.classList.contains('command__photo')) {
+				const lastSrc = target.src;
+
+				target.src = target.dataset.img;
+				target.dataset.img = lastSrc;
+			}
+		};
+
+    commandPhotos.forEach((elem) => {
+      elem.addEventListener('mouseover', changingPhotos);
+    });
+
+    commandPhotos.forEach((elem) => {
+      elem.addEventListener('mouseout', changingPhotos);
+    });
+
+	};  
+
+  changePhoto();
+
+  // Check calculator
+
+  const checkCalcBlock = () => {
+    const calcItems = document.querySelectorAll('.calc-item');
+
+    calcItems.forEach((elem) => {
+      elem.addEventListener('input', (event) => {   
+          event.target.value = event.target.value.replace(/\D/g, '');
+      });
+    });
+  };
+
+  checkCalcBlock();
+
+  // Check inputs 
+
+  const checkInputs = () => {
+    const topForms = document.querySelectorAll('.top-form');
+    
+    const checkingInputs = (event) => {
+      let target = event.target;
+      let name = document.querySelector('.top-form')[0];
+      if (target.name === 'user_name' || target.matches('.mess')) {
+        target.value = target.value.replace(/[^а-яё ,.-]/gi, '');
+      } 
+      if (target.matches('.form-email')) {
+        target.value = target.value.replace(/[а-яё ,?^]/gi, '');
+      }
+      if (target.matches('.form-phone')) {
+        target.value = target.value.replace(/[^0-9() \.-]/g, '');
+      }
+    };  
+       
+    topForms.forEach((elem) => {
+      elem.addEventListener('blur', (event) => {
+        // Заменяет 2 и более тире на один
+        elem.value = elem.value.replace(/-{1,}/g, "-");
+        // Заменяет 2 и более пробела на один
+        elem.value = elem.value.replace(/\s{1,}/gi, " ");
+        // Удаляет пробелы и тире в начале и конце строки
+        elem.value = elem.value.replace(/^\s|\s$|^-|-$/g, "");
+        // Приводит первую букву каждого слова в Верхний регистр в поле "Ваше имя"
+        if (elem.name === 'user_name') {
+        
+          let nameFirstLetter = [];
+          let word = elem.value.split(" ");
+          word.forEach((item) => {
+            item = item[0].toUpperCase() + item.slice(1);
+            nameFirstLetter.push(item);
+            elem.value = nameFirstLetter.join(" ");
+          });
+        }
+      }, true);
+    });
+       
+        
+      
+   
+    topForms.forEach(addEventListener('input', checkingInputs));
+    
+  };
+  
+
+  checkInputs();
+
 });
